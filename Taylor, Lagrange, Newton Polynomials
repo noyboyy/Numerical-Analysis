@@ -1,0 +1,95 @@
+[10 marks] Consider the function .
+Part (a) 
+Complete the code in the script window below so that it determines the  degree Taylor polynomial  about  that approximates .
+[Note: It could take ~20 seconds to a minute for the code to run as the derivatives get more involved to calculate as  increases.  You have done the question correctly up to this point if you receive a grade of 40% when you submit it.]
+Part (b)
+Complete the code in the script window below so that it determines the  degree Newton interpolating polynomial  that approximateson  where  are equally spaced nodes and  (Recall, in general that the command linspace(a,b,k) creates an array from  to  with  equally spaced elements).
+[Note: You have done the question correctly up to this point if you receive a grade of 70% when you submit it.]
+Part (c) 
+Complete the code in the script window below so that it determines the  degree Lagrange polynomial  that approximateson  where  are the Chebyshev nodes and .
+Part (d)
+Use the command fplot(FUNCTION,[0.7,4.1]) (substituting appropriately for the CAPITAL LETTERS) to plot the error (i.e.  where  or  defined above) in each polynomial approximation.
+Note: Enter the code for the plot of (i) the Taylor polynomial error under Figure(1), (ii) the Newton polynomial error under Figure(2), and (iii) the Lagrange polynomial error under Figure(3) in the script window below.  You don't need to enter any results in Gradescope, but you should look at the plots and compare the resulting errors.
+
+
+syms x f(x) T(x) N(x) P(x) L(x)
+%Don't change line above.  It's telling Matlab that x is a variable and f, T, N, P, L are functions throughout the problem.
+digits(4)
+%Don't change line above.  The code sets the number of decimal significant digits to 4.
+
+%--------------------------------
+%Part (a) - Taylor Polynomial
+%Define the function f(x) using the symbolic package in Matlab (you don't need to use @ with symbolic package).
+%Recall: ln is log in Matlab.
+f(x)=log(2-cos(x))
+%Define x0 (point at which Taylor polynomial is 'about')
+x0=2.4
+%Note: In general, the nth derivative of f is using the diff(f,n) command in Matlab.
+%Define the first derivative of f(x) - call if df.
+df= diff(f,1)
+%Use f(x) and df from above to define T_1(x).  Call it T(x).
+%Recall, to evaluate a function at a point use FUNCTION_NAME(POINT) substituting appropriately for CAPITAL LETTERS.
+T(x)=f(x0)+df(x0)*(x-x0)
+for n=2:5
+    %Define the nth derivative.  Call it df.
+    df=diff(f,n)
+    %Define T(x) in terms of df and the previous/current T(x).
+    %Note: factorial(n) is how you calculate n! in Matlab.
+    T(x)=T(x)+df(x0)*(x-x0)^(n)/factorial(n)
+end
+T=simplify(vpa(T(x)))  %Do not change.  This will display T(x).
+
+%--------------------------------
+%Part (b) - Newton Polynomial
+%Define equally spaced x_k as an array X (upper case to distinguish from the variable x).
+X= linspace(0.7,4.1,6)
+%Define array Y (again, uppercase) where each element of Y is f(x) evaluated at the corresponding element of X.
+Y = f(X)
+%Initializes coefficients in Newton Polynomial where a_0=Y(1).
+coeffs=Y;
+%Loop calculates coefficients a_0, a_1,...,a_N. Do not change.
+for i=2:length(coeffs)
+     coeffs(i:end) = (coeffs(i:end) - coeffs((i - 1):(end - 1))) ./ (X(i:end) - X(1:end - i + 1));
+end
+coeffs
+%Initializes the first term in N(x) (i.e. as Y(1))
+N(x)=vpa(Y(1)); 
+for k=2:length(coeffs)
+    %Determine N(x) using the coeffs and the prod(...) command.
+    %Hint: In general, prod(x-X(a:b)) will multiply the elements of the vector [x-X(1) x-X(2)...x-X(a)...x-X(b)...x-x(end)] from location a to location b.
+    %For example: prod(x-X(2:4))=(x-4)*(x-6)*(x-8) if X=[2 4 6 8 10]
+     N(x)=N(x)+coeffs(k)*prod((x-X(1:k-1)))
+end
+N=simplify(N(x))  %Do not change.  This will display N(x).
+
+%--------------------------------
+%Part (c) - Lagrange Polynomial
+%Define a, b, n, and the Chebyshev nodes as array C (as X was already used above).
+%Hint: First define a function handle c(i) where c(i) is the Chebyshev nodes formula.  Then define array C as c(0:5).
+
+
+
+
+
+%Initializes P(x).
+P(x)=0;   
+for k=1:6
+    L(x)=1;   %Initializes Lagrange coefficient polynomial L(x).
+    for i=1:6
+      if i==k
+         L(x)=L(x);
+      else
+          0
+      end
+    end
+    P(x)=3
+end
+P=simplify(vpa(P(x),4))  %Do not change.  This will display P(x).
+%--------------------------------
+%Part (d)
+figure(1)
+fplot(T,[0.7,4.1])
+figure(2)
+fplot(N,[0.7,4.1])
+figure(3)
+fplot(P,[0.7,4.1])
