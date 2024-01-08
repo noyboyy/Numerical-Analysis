@@ -1,0 +1,34 @@
+[4 marks]   Suppose that you had a portfolio containing shares of GameStop Corp. stocks (with ticker symbol GME on the Nasdaq).  The Excel file named GME.xlsx (which can be viewed under Lab 2 in "Weekly Lab Information" on MyLearningSpace) lists the daily prices and returns (as decimals) for the GME in 2021.
+Part (a) 
+Read the Excel file into Matlab (name it GME) and then define the daily prices for GameStop Corp. as an array named PRICES. 
+Note, in general and substituting appropriately for the CAPITAL_LETTERS:
+to read a dataset into Matlab the command DATASET_NAME=readtable("FILE_NAME.xlsx"); can be used.
+the command transpose(DATASET_NAME{:,N}) will extract column N from the data set as an array.
+Part (b) 
+Complete the code that creates the cubic spline for the GameStop Corp. price data. Starting at the first trading day in 2021, only use the returns from once every two weeks to determine the spline (i.e. days  and prices  as there are only 10 trading days every two weeks) and then evaluate the cubic spline for every day of trading (call the result GMEcs). 
+Note, in general,  the command spline(X,Y,v) will determine the cubic spline using data points  where  and  are elements in arrays and , respectively, and then evaluate the spline at all elements in array .
+Part (c)
+Create a plot of the cubic spline for the GameStop Corp. price data. 
+Part (d)
+Use the cubic spline to approximate the 10 day simple moving average GameStop Corp. price on i) the 10th day of trading in 2021 (call the result First_10day) and ii) the last day of trading in 2021 (call the result Last_10day).
+[Note: To calculate the  day simple moving average on day  you simply add the  returns on days  and then divide by .] 
+
+%Part a)
+%Read in data set.
+GME = readtable("GME.xlsx")
+PRICES = transpose(GME{:,2})
+%Define array PRICES as the daily GameStop prices.
+
+
+%Part b)
+d1=  1:10:252     %Define the days array 1,11,21,...
+P= PRICES(d1)
+GMEcs=spline(d1,P,1:252)
+%Part c)
+%Run the following code to plot the data points (d1,PRICES) for every 10 days of trading along with the cubic spline
+figure(1)
+plot(d1,P,'o',1:252,GMEcs)
+%Part d)
+%Approximate the 10 day moving average return on the 10th day and last day of trading in 2021. 
+First_10day=sum(GMEcs(1:10))/10
+Last_10day = sum(GMEcs(243:252))/10
