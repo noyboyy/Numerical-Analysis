@@ -1,0 +1,44 @@
+opy/paste the code from Question #1(b) for the bisection method and modify it to find the root of  on  using the regula falsi (or false position) method.  As in parts (a)-(c), use a tolerance of  between consecutive approximations for the stopping condition.
+
+%Define g(x) as a function handle.
+g=@(x)x.^3-x*cos(x)+1
+%Define a_0,b_0, and c_0 as a(1),b(1), and c(1), respectively.
+a(1) = -pi
+b(1) = -pi/6
+c(1) = b(1)-g(b(1))*(b(1)-a(1))/(g(b(1))-g(a(1)))
+
+c1=c(1) %For marking purposes, don't change this line.
+%Define the tolerance and initialize the counter as k=1. 
+tolerance = 0.00001
+k=1
+
+%Define the difference as any value greater than the tolerance (e.g. 1).
+difference = 1
+%format long ensures that answer is stated to 15 decimals. Don't change.
+format long;  
+while difference>tolerance
+    if g(c(k))>0
+        a(k+1) = a(k);
+        b(k+1) = c(k);
+        
+        
+                %End line with a ; so all of the iterations aren't displayed in output
+                %End line with a ; so all of the iterations aren't displayed in output
+    else
+        a(k+1) = c(k);
+        b(k+1) = b(k);        %End line with a ; 
+                %End line with a ;    
+    end
+    c(k+1)= b(k+1)-g(b(k+1))*(b(k+1)-a(k+1))/(g(b(k+1))-g(a(k+1)));
+    %   p(k+1) = p(k)-g(p(k))*(p(k)-p(k-1))/(g(p(k))-g(p(k-1)))
+    
+    %Define c(k+1)
+                %End line with a ; 
+    %Recalculate the difference between consecutive c_k's
+    difference = abs(c(k+1) - c(k))
+    k = k+1
+    %Increase counter k by 1.
+    
+end
+c   %Displays approximations
+difference %Displays difference between final consecutive approximations
