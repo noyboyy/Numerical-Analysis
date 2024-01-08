@@ -1,0 +1,48 @@
+[5 marks]  Through a series of mergers and acquistions, suppose that: 
+ Company 1 owns 60% of its own stock and also owns 2%, 3%, and 10% of the stock in companies 2, 3, and 4, respectively. 
+Similarily: 
+ Company 2 owns 92% of its own stock and also owns 10%, 7%, and 14% of the stock in companies 1, 3, and 4, respectively. 
+ Company 3 owns 81% of its own stock and also owns 6%, 2%, and 4% of the stock in companies 1, 2, and 4, respectively. 
+ Company 4 owns 72% of its own stock and also owns 24%, 4%, and 9% of the stock in companies 1, 2, and 3, respectively. 
+[Note: This is called cross-holding.  One of example of this is Warren Buffet's Berkshire Hathaway which owns shares in Apple, Coca-Cola, etc. and these companies in turn could also own shares in Berkshire Hathaway.] 
+The taxable income for each company is calculated by determining its share of its own annual net profit plus its share in the net profits from the other companies.  If the taxable incomes for companies 1, 2, 3, and 4 are $3.489 million, $6.777 million, $6.639 million, and $2.995 million, respectively, then the system of linear equations  emerges where:
+The coefficient matrix  is the weightings matrix with each entry  representing the percentage (written as a decimal) of stock that Company  owns in Company  ,
+The vector  is the taxable incomes with  representing the taxable income (in millions of dollars) for Company , and
+The vector  is the unknown net profits with  representing the net profit (in millions of dollars) for Company  over the year.
+Complete the code for using the Jacobi Iterative Method to approximate the solution to the system of equations .
+For marking purposes, use  as the initial guess and ensure that the code stops once the tolerance . 
+[Note: Once you have completed and submitted the code for grading you will want to copy and paste it into the script window for Question #4) - Gauss-Seidel Iterative Method.]
+
+%Define matrix W and vector t.
+W=[0.6 0.02 0.03 0.10; 0.1 0.92 0.07 0.14; 0.06 0.02 0.81 0.04; 0.24 0.04 0.09 0.72]
+t= [3.489, 6.777,6.639,2.995]
+%The following defines n as the number of rows in matrix W
+n=size(W,1);
+%Define initial guess p^(1) as the nx1 column vector p(1:n,1) in Matlab.
+p(1:n,1)=[307;307;307;307]
+%To ensure you enter the 'while' loop below, set the tolerance to be any
+%value greater than 0.0001 (call it tol).
+tol=1
+%Initialize counter j.
+j=1
+while tol>0.0001
+    for i=1:n
+        %Determine each element of approximation vector p^(j+1) (i.e. p(i,j+1) in Matlab).
+        %Recall: In general, x(1,1:k)*y(1:k,1)=x(1,1)*y(1,1)+x(1,2)*y(2,1)+...+x(1,k)*y(k,1) in Matlab
+        
+        if i==1
+            p(i,j+1)=(t(i)-W(i,i+1:n)*p(i+1:n,j))/W(i,i)
+        elseif i>1 && i<n
+            p(i,j+1)=(t(i)-W(i,1:i-1)*p(1:i-1,j)-W(i,i+1:n)*p(i+1:n,j))/W(i,i)
+        else
+            p(i,j+1)=(t(i)-W(i,1:i-1)*p(1:i-1,j))/W(i,i)
+        end
+    end
+    tol=norm(p(:,j+1)-p(:,j),2)
+    j=j+1
+end
+%Displaying Results:
+p(1:n,1) %Displays initial guess
+J=j-1 %Displays number of iterations (as our initial guess was when j=1 not 0).
+tol %Displays tolerance ||x^(J+1)-x^(J)||
+Approx=p(:,j) %Displays approximation after J iterations
