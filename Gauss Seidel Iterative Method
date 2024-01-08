@@ -1,0 +1,44 @@
+ [4 marks] Recall, from Question #3), the system of linear equations where:
+The coefficient matrix  was a weightings matrix with each entry  representing the percentage (written as a decimal) of stock that Company  owns in Company  ,
+The vector  was the taxable incomes with  representing the taxable income (in millions of dollars) for Company , and
+The vector  was the unknown net profits with  representing the net profit (in millions of dollars) for Company  over the year.
+Part (a)
+Copy/Paste the code from Question #3) into the script window below.   Modify the code to use the Gauss-Seidel Iterative Method to approximate the solution to the system of equations.
+For marking purposes, use  as the initial guess and ensure that the code stops once the tolerance . 
+Part (b)
+(i) Explain (in the appropriate answer box in Gradescope) why it can be concluded that both the Jacobi and Gauss-Seidel Iterative Methods would have converged to the solution regardless of the starting initial guess. 
+(ii) Which of the two iterative methods above converges quicker to the actual solution? Being specific, explain why this occurs in the appropriate answer box in Gradescope.
+
+%Define matrix W and vector t.
+W=[0.6 0.02 0.03 0.10; 0.1 0.92 0.07 0.14; 0.06 0.02 0.81 0.04; 0.24 0.04 0.09 0.72]
+t= [3.489, 6.777,6.639,2.995]
+%The following defines n as the number of rows in matrix W
+n=size(W,1);
+%Define initial guess p^(1) as the nx1 column vector p(1:n,1) in Matlab.
+p(1:n,1)=[307;307;307;307]
+%To ensure you enter the 'while' loop below, set the tolerance to be any
+%value greater than 0.0001 (call it tol).
+tol=1
+%Initialize counter j.
+j=1
+while tol>0.0001
+    for i=1:n
+        %Determine each element of approximation vector p^(j+1) (i.e. p(i,j+1) in Matlab).
+        %Recall: In general, x(1,1:k)*y(1:k,1)=x(1,1)*y(1,1)+x(1,2)*y(2,1)+...+x(1,k)*y(k,1) in Matlab
+        
+        if i==1
+            p(i,j+1)=(t(i)-W(i,i+1:n)*p(i+1:n,j))/W(i,i)
+        elseif i>1 && i<n
+            p(i,j+1)=(t(i)-W(i,1:i-1)*p(1:i-1,j)-W(i,i+1:n)*p(i+1:n,j))/W(i,i)
+        else
+            p(i,j+1)=(t(i)-W(i,1:i-1)*p(1:i-1,j))/W(i,i)
+        end
+    end
+    tol=norm(p(:,j+1)-p(:,j),2)
+    j=j+1
+end
+%Displaying Results:
+p(1:n,1) %Displays initial guess
+J=j-1 %Displays number of iterations (as our initial guess was when j=1 not 0).
+tol %Displays tolerance ||x^(J+1)-x^(J)||
+Approx=p(:,j) %Displays approximation after J iterations
