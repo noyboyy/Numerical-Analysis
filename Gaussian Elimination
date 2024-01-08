@@ -1,0 +1,54 @@
+Consider the following internet of 5 webpages where the arrows indicate the flow of traffic between the webpages and the integer and  values, where , represent the movement of the visitors to and from the webpages.
+
+For example, at Webpage 1: 
+    i. 84 people entered the internet, 
+    ii.  and  people arrived from webpages 4 and 5, respectively, and
+    iii. 195, , and 22 people went to pages 2, 3, and 5, respectively.
+As the number of visitors in must equal the number of visitors out at a single webpage this results in the equation  at Webpage 1.
+Making similar arguments for all 5 webpages results in the system of linear equations:
+
+
+Part (a)
+If the system is represented by , define the coefficient  and the vector  in the script window below and then 'Submit' the code for using Gaussian elimination to express the augmented matrix  in upper triangular form.  
+[Note: When you 'Submit' you'll know that you have done this part correctly if you receive a grade of 20% on the problem to this point.]
+Part (b)
+Complete the code for using backward substitution to find  (i.e. the movement of visitors between webpages).
+[Note: In your 'for' loop you will want to use the fact that, in general, if  is a row vector with  elements and  is a column vector with  elements then y(1,1:k)*z(1:k,1)=y(1,1)*z(1,1)+y(1,2)*z(2,1)+...+y(1,k)*z(k,1) (i.e. like a dotproduct) in Matlab.]
+
+
+%Part (a)
+%Define matrix S
+S=[2 0 -40 0 1; 1 -1 30 0  0; 0 0 60 -1 0; 1 1 0 -1 0; 0 0 3 0 1]
+%Define nx1 matrix t
+t=[133;195;-73;-92;22]
+%The following command defines n as the number of rows in S
+n=size(S,1)         
+%The following creates the augmented matrix [S|t].
+Aug=[S t]; 
+for j=1:n-1 %These are the columns elimination is performed on.
+    for i=j+1:n %Entry/Row in column j where elimination performed.
+        %Constant m to multiply row j by 
+        m=Aug(i,j)/Aug(j,j);  
+        %Performs elimination on row i by subtracting m x row j
+        Aug(i,j:n+1)=Aug(i,j:n+1)-m*Aug(j,j:n+1);
+    end
+end
+%All of the commands above end with a ';' in order to hide their output. 
+%Aug below states Augmented matrix in upper triangular form.
+Aug 
+
+%Part (b)
+%The following initializes/defines the solution x as an nx1 vector with 0's as its entries. Leave the code as is.
+x=zeros(n,1);
+%Calculate x_n (i.e. x_5 in the context of this problem) in the system of equations.
+%Hint: Use two elements from 'Aug' above
+x(n)= Aug(n,n+1)./Aug(n,n)
+%Complete the 'for' loop that determines remaining x_i using back substitution
+%Recall from above that if, in general, y is a row vector and z is a column vector both with k elements then:
+%y(1,1:k)*z(1:k,1)=y(1,1)*z(1,1)+y(1,2)*z(2,1)+...+y(1,k)*z(k,1) in Matlab
+for i=n-1:-1:1
+    x(i)=(Aug(i,n+1)-Aug(i,i+1:n)*x(i+1:n,1))/Aug(i,i)
+end
+%Don't change the following as they are for grading purposes.
+xn=x(n)
+x
