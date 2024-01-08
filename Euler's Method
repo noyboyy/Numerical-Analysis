@@ -1,0 +1,72 @@
+[8 marks Matlab, 7 marks Gradescope]
+Suppose that time  is the year  when the Region of Waterloo's population was approximately  people.  One model for the growth of the region's population since then is the Logistic Growth Model given by:
+    , where  is Waterloo Region's population  years after .
+Part (a)
+[Note: Submit the code once you've completed all of part (a) (i.e. parts (i)-(v) below).]
+(i) Complete the code that uses Euler's method to approximate the solution Y to the IVP on  with  subintervals. 
+   [Note the use of CAPITAL LETTERS for arrays Y and T here.  This is to ensure that Matlab can distinguish between these arrays and the actual initial value problem in part (iii) below.] 
+(ii) The command find(T==year) (substituting appropriately for year) returns the location of the year in array T (from part (a)(i)).  For each of years , and , find the location of the year in array T (e.g. T12=find(T==12), etc.) and use it along with results from part (a)(i) to approximate Waterloo Region's population during that year (e.g. Y12=vpa(Y(T12),6), etc. - note, 6 was chosen as the population is in hundreds of thousands of people). 
+(iii) Use the command y(t)=dsolve(diff(y(t),t)==f(t,y),y(T(1))==Y(1)) to find the exact solution to the initial value problem.  
+(iv) Run the code that generates a plot of the exact solution from part (iii) on  along with the approximations found in part (i). 
+(v) Determine the errors (e.g. E12=vpa(abs(y(12)-Y12),6) ) in using each of the three approximations in part (ii) to estimate the solution to the initial value problem in part (iii). 
+Part (b)
+Looking at the results in part (a), when  and , what did Euler's Method approximate Waterloo Region's population  to be, and with what error  (in relation to the actual solution to the IVP), in each of the following years?  Record (or copy/paste) the answers from the results in part (a) to the closest person in the corresponding answer box in Gradescope.
+(i)   In 2007:  Population             and Error 
+(ii)   In 2019:  Population            and Error 
+(iii)  In 2031:  Population            and Error 
+Part (c)
+Redo part (b) for  and .  Looking at the results, what did Euler's Method approximate Waterloo Region's population  (i.e. in 2019) to be and with what error  (in relation to the actual solution to the IVP)? Record (or copy/paste) the answers to the closest person in the corresponding answer box in Gradescope.
+[Note: If you change  and then re-submit, Matlab Grader will grade it as incorrect since it is set to grade it for .  So don't re-submit, simply change  and just run the script.] 
+When : Population         and Error 
+Part (d)
+Redo part (b) for  and .  Looking at the results, what did Euler's Method approximate Waterloo Region's population  (i.e. in 2019) to be and with what error  (in relation to the actual solution to the IVP)? Record (or copy/paste) the answers to the closest person in the corresponding answer box in Gradescope.
+[Note: If you change  and then re-submit, Matlab Grader will grade it as incorrect since it is set to grade it for .  So don't re-submit, simply change  and just run the script.] 
+When : Population        and Error 
+[Note: Once the code for this problem is completed (and submitted) you will want to copy and paste the code into the script window for "Question #2)."]
+Part (e)
+Comparing how the step size  changes to how the corresponding errors change in parts (b), (c), and (d), what does this imply about the order of the error in using Euler's Method?  Explain your answer in the corresponding answer box in Gradescope (being sure to make reference to specific results in parts (b), (c), and (d) for the year 2019 in your explanation).
+
+
+syms t y %Defines y and t as variables. Don't change.
+%Part (i)
+%Define the endpoints of the interval a and b, the number of subintervals N, and the space between nodes h.
+a = 0
+b= 60
+N = 30
+h= 2
+
+
+
+%Define f(t,y) as a function (not a function handle) and the initial conditions T(1) and Y(1).
+f(t,y) = y/10000*(200-y/12000)
+T(1) = 0
+Y(1) = 421000
+
+
+%Complete the loop for Euler's method to find arrays Y and T.
+%Note: You may want to end lines with a ';' so that each iteration isn't displayed until the loop is completed.
+for i=1:30
+    T(i+1)=T(i)+h;
+    Y(i+1)=Y(i)+h*f(T(i),Y(i));
+end
+T
+Y
+%Part (ii)
+T12=find(T==12)
+Y12=vpa(Y(T12),6)
+T24=find(T==24)
+Y24=vpa(Y(T24),6)
+T36=find(T==36)
+Y36=vpa(Y(T36),6)
+%Part (iii)
+%Use y(t)=dsolve(diff(y(t),t)==expression,y(T(1))==Y(1)) to find solution to IVP
+syms y(t)  %Ensures y(t) is symbolic.  Don't change.
+y(t)=dsolve(diff(y(t),t)==f(t,y),y(T(1))==Y(1))
+%Part (iv)
+plot(T,Y,'+')
+hold on
+fplot(y(t),[0,60])
+%Part (v)
+E12=vpa(abs(y(12)-Y12),6)
+E24=vpa(abs(y(24)-Y24),6)
+E36=vpa(abs(y(36)-Y36),6)
