@@ -1,0 +1,63 @@
+[4 marks Matlab, 4 marks Gradescope]
+Copy/Paste your code from Question #2 in the script window below.
+Part (a)
+Modify the code so that it uses the 4th order Runge-Kutta Method (as described in the lab notes) to approximate Waterloo Region's population Y when using  subintervals on . 
+Looking at the results, what did the 4th order Runge-Kutta Method approximate Waterloo Region's population  (i.e. in 2007) to be and with what error  (in relation to the actual solution to the IVP)? Record (or copy/paste) the answers to the closest person for  and to 6 significant digits for  in the corresponding answer box in Gradescope.
+When : Population         and Error 
+Part (b)
+Redo part (a) for  subintervals on . 
+Looking at the results, what did the 4th order Runge-Kutta Method approximate Waterloo Region's population  (i.e. in 2007) to be and with what error  (in relation to the actual solution to the IVP)? Record (or copy/paste) the answers to the closest person for  and to 6 significant digits for  in the corresponding answer box in Gradescope.
+When : Population         and Error 
+[Note: Similar to Questions #1 and #2, if you change  and then re-submit, then Matlab Grader will grade it as incorrect since it is set to grade it for .  So don't re-submit, simply change  and just run the script.]
+Part (c)
+Comparing how the step size  changes to how the corresponding errors change from part (a) to part (b), what does this imply about the order of the error in using the 4th order Runge-Kutta Method?  Explain your answer in the corresponding answer box in Gradescope (being sure to make reference to specific results in parts (a) and (b) for the year 2007 in your explanation).
+
+
+syms t y %Defines y and t as variables. Don't change.
+%Part (i)
+%Define the endpoints of the interval a and b, the number of subintervals N, and the space between nodes h.
+a = 0
+b= 60
+N = 5
+h= 12
+
+
+
+%Define f(t,y) as a function (not a function handle) and the initial conditions T(1) and Y(1).
+f(t,y) = y/10000*(200-y/12000)
+T(1) = 0
+Y(1) = 421000
+
+
+%Complete the loop for Euler's method to find arrays Y and T.
+%Note: You may want to end lines with a ';' so that each iteration isn't displayed until the loop is completed.
+for i=1:N
+    T(i+1)=T(i)+h;;
+    K1=h*f(T(i),Y(i))
+    K2=h*f(T(i)+1/2*h,Y(i)+1/2*K1);
+    K3=h*f(T(i)+1/2*h,Y(i)+1/2*K2);
+    K4=h*f(T(i+1),Y(i)+K3);
+   
+    Y(i+1)=Y(i)+(1/6)*(K1+2*K2+2*K3+K4);
+end
+T
+Y
+%Part (ii)
+T12=find(T==12)
+Y12=vpa(Y(T12),6)
+T24=find(T==24)
+Y24=vpa(Y(T24),6)
+T36=find(T==36)
+Y36=vpa(Y(T36),6)
+%Part (iii)
+%Use y(t)=dsolve(diff(y(t),t)==expression,y(T(1))==Y(1)) to find solution to IVP
+syms y(t)  %Ensures y(t) is symbolic.  Don't change.
+y(t)=dsolve(diff(y(t),t)==f(t,y),y(T(1))==Y(1))
+%Part (iv)
+plot(T,Y,'+')
+hold on
+fplot(y(t),[0,60])
+%Part (v)
+E12=vpa(abs(y(12)-Y12),6)
+E24=vpa(abs(y(24)-Y24),6)
+E36=vpa(abs(y(36)-Y36),6)
