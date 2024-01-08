@@ -1,0 +1,60 @@
+%Part (a)
+%Define matrix S
+S=[2 0 -40 0 1; 1 -1 30 0  0; 0 0 60 -1 0; 1 1 0 -1 0; 0 0 3 0 1]
+%Define nx1 matrix t
+t=[133;195;-73;-92;22]
+%The following command defines n as the number of rows in S
+n=size(S,1)         
+%The following creates the augmented matrix [S|t].
+Aug=[S t]; 
+for j=1:n-1 %These are the columns elimination is performed on.
+    for i=j+1:n %Entry/Row in column j where elimination performed.
+        %Constant m to multiply row j by 
+        m=Aug(i,j)/Aug(j,j);  
+        %Performs elimination on row i by subtracting m x row j
+        Aug(i,j:n+1)=Aug(i,j:n+1)-m*Aug(j,j:n+1);
+    end
+end
+%All of the commands above end with a ';' in order to hide their output. 
+%Aug below states Augmented matrix in upper triangular form.
+Aug 
+
+%Part (b)
+%The following initializes/defines the solution x as an nx1 vector with 0's as its entries. Leave the code as is.
+x=zeros(n,1);
+%Calculate x_n (i.e. x_5 in the context of this problem) in the system of equations.
+%Hint: Use two elements from 'Aug' above
+x(n)= Aug(n,n+1)./Aug(n,n)
+%Complete the 'for' loop that determines remaining x_i using back substitution
+%Recall from above that if, in general, y is a row vector and z is a column vector both with k elements then:
+%y(1,1:k)*z(1:k,1)=y(1,1)*z(1,1)+y(1,2)*z(2,1)+...+y(1,k)*z(k,1) in Matlab
+for i=n-1:-1:1
+    x(i)=(Aug(i,n+1)-Aug(i,i+1:n)*x(i+1:n,1))/Aug(i,i)
+end
+%Don't change the following as they are for grading purposes.
+xn=x(n)
+x
+
+%Part (a)(i): Define n, H, and [L,U].
+n=3
+H=hilb(n)
+[L,U]=lu(H)
+
+%Part (a)(ii): Find the condition K of the matrix H.
+K=norm(H,2)*norm(inv(H),2)
+%Part (a)(iii)
+%The following initializes/defines b as an nx1 vector with 0's as its entries. Leave the code as is.
+b=zeros(n,1);
+for i=1:n
+    %Define each element of column vector b (i.e. b(i)) using the sum command (this will help for part (b)) 
+    b(i)=sum(H(i,:))
+end
+%Displays vector b.
+b
+%Part (a)(iv)(v): Find y and then x, r, and RBE as described above.
+y=L\b
+x=U\y
+r=b-L*y
+RBE=norm(r)/norm(b)
+
+
