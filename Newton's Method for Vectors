@@ -1,0 +1,6 @@
+[5 marks] Consider the following nonlinear system of equations:
+
+
+
+Complete the code for using the Newton's Method to approximate the solution to the system of nonlinear equations.
+For marking purposes, use  (denote as X(:,1) below) as the initial guess and ensure that the code stops once the tolerance .
