@@ -1,0 +1,126 @@
+10 marks] Consider the hyperbolic function .
+Part (a): Forward-Difference Formula
+Suppose that  for  and  is the approximation of  using  the Forward-Difference Formula.  In the script window below:
+i) Complete the code so that it uses the Forward-Difference Formula to find each  until the tolerance is no longer satisfied. 
+ii) Find the exact value of . Call it exact.
+iii) Find the error in using each approximation from part (a) to approximate  [i.e. find exact for each  found in part i)]. Call the resulting array E_F.
+    [Note: All of the results from part iii) should be stored in an array called E_F.]
+iv) Use the result in part iii) to evaluate the array of error ratios .  Call the resulting array RE_F.
+[Note: You have done the question correctly up to this point if you receive a grade of 40% when you submit it.]
+Part (b): Backward-Difference Formula
+Copy/paste the code from part (a) under part (b) in the script window below.  Modify the code so that  for  and it uses the Backward-Difference Formula to find each  that approximates  until the tolerance  is no longer satisfied. 
+[Note: You don't need all of the code from part (a). Just copy/paste the components you need to complete part (b).]
+Part (c): Centred-Difference Formula
+Copy/paste the code from part (a) under part (c) in the script window below.  Modify the code so that  for  and it uses the Centred-Difference Formula to find each  that approximates  until the tolerance  is no longer satisfied. 
+[Note: You don't need all of the code from part (a). Just copy/paste the components you need to complete part (c).]
+Part (d): Error Analysis
+In each array of error ratios from parts (a), (b), and (c) (i.e. RE_F, RE_B, and RE_C), how do the elements compare to how  is changing between consecutive approximations?  What does this imply about the order at which each approximation is converging? Explain your answers in the space provided in Gradescope.
+
+
+
+syms x %Sets x as variable.
+digits(8) %Sets output to display 8 significant decimal digits.
+%Part(a)(i)
+%Similar to Question #1, define g(x) as a function (not a function handle).
+g(x)=cosh(cos(x))
+
+%Define x0 (the point at which you are trying to find the derivative).
+%Note: Wrap the value in vpa() so that it converts all future calculations involving it to decimals.
+x0 =vpa(-4.2)
+%Use a for loop to evaluate F(1) (i.e. F_1), F(2), and F(3) using the forward-difference formula.
+for k=1:3
+    h=10^(-k)
+    F(k)=(g(x0+h)-g(x0))/h
+end
+%Use a while loop to evaluate each F(k) until tolerance is no longer satisfied.
+%Note: k is already set to 3 from for loop above.
+
+while abs(F(k)-F(k-1)) < abs(F(k-1)-F(k-2))
+    k= k+1
+    h=10^(-k)
+    F(k)=vpa((g(x0+h)-g(x0))/h)
+  
+
+   
+end
+F %Displays approximations
+%Part(a)(ii)
+dg = diff(g,1)
+exact= dg(x0)
+
+%Part(a)(iii)
+E_F= abs(F- exact)
+%Part(a)(iv)
+RE_F= E_F(2:7)./E_F(1:6)
+%--------------------------------
+%Part(b)
+syms x %Sets x as variable.
+digits(8) %Sets output to display 8 significant decimal digits.
+%Part(a)(i)
+%Similar to Question #1, define g(x) as a function (not a function handle).
+g(x)=cosh(cos(x))
+
+%Define x0 (the point at which you are trying to find the derivative).
+%Note: Wrap the value in vpa() so that it converts all future calculations involving it to decimals.
+x0 =vpa(-4.2)
+%Use a for loop to evaluate F(1) (i.e. F_1), F(2), and F(3) using the forward-difference formula.
+for k=1:3
+    h=5^(-k)
+    B(k)=(g(x0)-g(x0-h))/h
+end
+%Use a while loop to evaluate each F(k) until tolerance is no longer satisfied.
+%Note: k is already set to 3 from for loop above.
+
+while abs(B(k)-B(k-1)) < abs(B(k-1)-B(k-2))
+    k= k+1
+    h=5^(-k)
+    B(k)=vpa((g(x0)-g(x0-h))/h)
+  
+
+   
+end
+F %Displays approximations
+%Part(a)(ii)
+dg = diff(g,1)
+exact= dg(x0)
+
+%Part(a)(iii)
+E_B= abs(B- exact)
+%Part(a)(iv)
+RE_B= E_B(2:7)./E_B(1:6)
+%--------------------------------
+%Part(c)
+syms x %Sets x as variable.
+digits(8) %Sets output to display 8 significant decimal digits.
+%Part(a)(i)
+%Similar to Question #1, define g(x) as a function (not a function handle).
+g(x)=cosh(cos(x))
+
+%Define x0 (the point at which you are trying to find the derivative).
+%Note: Wrap the value in vpa() so that it converts all future calculations involving it to decimals.
+x0 =vpa(-4.2)
+%Use a for loop to evaluate F(1) (i.e. F_1), F(2), and F(3) using the forward-difference formula.
+for k=1:3
+    h=2^(-k)
+    C(k)=vpa((g(x0+h)-g(x0-h))/(2*h))
+end
+%Use a while loop to evaluate each F(k) until tolerance is no longer satisfied.
+%Note: k is already set to 3 from for loop above.
+
+while abs(F(k)-F(k-1)) < abs(F(k-1)-F(k-2))
+    k= k+1
+    h=2^(-k)
+    C(k)=vpa((g(x0+h)-g(x0-h))/(2*h))
+  
+
+   
+end
+F %Displays approximations
+%Part(a)(ii)
+dg = diff(g,1)
+exact= dg(x0)
+
+%Part(a)(iii)
+E_C= abs(C- exact)
+%Part(a)(iv)
+RE_C= E_C(2:7)./E_C(1:6)
