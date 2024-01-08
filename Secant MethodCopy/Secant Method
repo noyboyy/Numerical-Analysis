@@ -1,0 +1,36 @@
+Copy/paste the code for Newton's method from Question #1(a)(A) in the script window below.  Modify the code to approximate the root of  on  using the secant method.  As in parts (a) and (b), use a tolerance of  between consecutive approximations for the stopping condition.
+
+
+%Part A
+%Define initial guess as first entry in array p.
+%As p is an array, p(0) does not exist.
+%Hence, we need to define 'p(1)' as initial guess p_0.
+p(1)=-pi
+p(2)= -pi/6
+syms x %Defines x as a variable. Don't change.
+format long %Ensures answers are stated to 15 decimal places
+%Define g(x) as a function handle.
+g=@(x)x.^3-x*cos(x)+1
+%Define g'(x) as using the command gprime=diff(g,x)
+gprime=diff(g,x)
+%Define the 'tolerance' 
+tolerance=.00001;
+%Define 'difference' to be any number larger than the tolerance
+difference=1;
+%Define the counter in the loop as k=1
+k=2;
+%Create a 'while' loop for Newton's Method.
+%Hint: There should be 3 lines of code in the loop.
+%One being the approximation p(k+1), one being the absolute value of the difference between consecutive approximations,
+%and the last being the loop's counter.
+while difference>tolerance
+    p(k+1) = p(k)-g(p(k))*(p(k)-p(k-1))/(g(p(k))-g(p(k-1)))
+    difference = abs(p(k+1)-p(k))
+    k= k+1
+    %Note, to find the derivative at a point use subs(gprime,x,point) - substituting appropriately for point.
+    
+%p(k)-((g(p(k))*((p(k)-p(k-1))/(g(p(k)-g(p(k-1)))))))   
+    
+end
+p   %Displays p_0,...,P_(N) as an array.
+difference  %Displays difference between last two approx.
