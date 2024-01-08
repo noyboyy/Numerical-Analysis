@@ -1,0 +1,67 @@
+Read through the partially completed code below that uses the Crank-Nicolson method to solve the parabolic partial differential equation  with initial condition  for  and boundary conditions  and  for .  The code is a function in Matlab that once completed you can 'call' to then approximate the solution  using some given parameters.
+Consider  with initial condition  for  and boundary conditions  and  for .
+Part (a) 
+To complete the code, in the "Function" script window:
+(i) Define the step sizes using only the variables , , , , , and .
+(ii) Define the initial and boundary conditions.
+Once the code is completed, "call the function" for the given parameters when  (once the function is called you must click "Run" to see output and "Submit" to grade the code).
+Part (b)
+In the "Code to call your function", use the function and/or any appropriate follow-up commands to the following statements.  Enter the requested values in the text box available in Gradescope.
+[Note: Exact solution is  and you may assume , , , and .]
+(i) The exact value of 
+(ii) When: 
+        :                                      
+        :                                    
+        :                                
+[Note: Be careful when extracting the  values from Matlab.  Althought  is a matrix,  in the context of this problem is not approximated by U(i,j).  Think in terms of the coordinate axes (for example, U(1,1) would approximate  since the lop left entry in U is top left boundary point (0,1).]
+
+
+
+
+% Crank-Nicolson method
+% Used to solve du/dt = c d^2u/dx^2
+% Input: space interval [x_left,x_right], time interval [t_bottom,t_top],
+%        number of space subintervals M, number of time subintervals N
+%        c is the constant coefficient
+
+% Output: solution U and corresponding mesh plot
+
+% Example usage: U=crank(x_left,x_right,t_bottom,t_top,c,M,N) 
+%                substituting appropriately for x_left, x_right,
+%                t_bottom, t_top, c, M, and N.
+
+function U=crank(x_left,x_right,t_bottom,t_top,c,M,N)
+%Define step sizes using only the variables x_left, x_right, t_bottom, t_top, M, and N
+h=(x_right-x_left)/M
+k=(t_top-t_bottom)/N            
+
+%Method setup - nothing to change
+sigma=c*k/(h*h); m=M-1; n=N;
+a=diag(2+2*sigma*ones(m,1))+diag(-sigma*ones(m-1,1),1);
+a=a+diag(-sigma*ones(m-1,1),-1);    % define tridiagonal matrix a
+b=diag(2-2*sigma*ones(m,1))+diag(sigma*ones(m-1,1),1);
+b=b+diag(sigma*ones(m-1,1),-1);     % define tridiagonal matrix b
+
+%Define the initial and boundary conditions
+l=@(t)2*exp(2*t)
+r=@(t)(exp(2)+1)*exp(2*t-1)
+f=@(x)2*cosh(x)
+
+%Creating U - nothing to change
+lside=l(t_bottom+(0:n)*k); rside=r(t_bottom+(0:n)*k);
+U(:,1)=f(x_left+(1:m)*h)';              % initial conditions
+for j=1:n
+    sides=[lside(j)+lside(j+1);zeros(m-2,1);rside(j)+rside(j+1)];
+    U(:,j+1)=a \ (b*U(:,j)+sigma*sides);
+end
+U=flipud(transpose([lside;U;rside]));
+
+%Creating plot - nothing to change
+x=x_left+(0:M)*h;t=t_bottom+(0:N)*k;
+mesh(x,t,U');
+xlabel('x');ylabel('t');
+axis([x_left x_right t_bottom t_top 0 25])
+
+%Now type: U=crank(x_left,x_right,t_bottom,t_top,c,M,N) 
+%          substituting appropriately for x_left, x_right,
+%          t_bottom, t_top, c, M, and N to call the function
