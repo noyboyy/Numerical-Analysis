@@ -1,0 +1,48 @@
+Consider the elliptic partial differential equation  (called Laplace's equation) with boundary conditions:
+   ,     ,    
+   ,    
+Part a
+Complete the code that uses the finite difference method and  subintervals to approximate the solution  at the interior points of the rectangle .  That is, find the inner  that approximate  where ,  (see diagram below).
+[Recall that, in general, the command A\B in Matlab finds the solution  to system .]
+
+Part b
+In your code for part (a), go back to where the boundary conditions are defined and add the actual solution  to the piecewise defined function containing the boundary conditions.  That is, add ,log(x^2+y^2) after fun_4 in the appropriate line of code.
+Part c
+Run the code that plots the  found in part (a) that approximate each  along with the solution from part (b). Once completed, take a screenshot of the resulting plot and submit the picture to Question #1c) in Gradescope.
+[Hint: Right click on resulting plot, select "Take Screenshot", and then "Download" to create image.]
+
+
+%Part (a)
+%Define n (which is equivalent to m in this problem) and h (distance between points)
+n=4
+h=(1-0)/n
+
+
+%Define all x_i and y_j as arrays X and Y (capital X and Y so Matlab doesn't confuse them with variables x and y below)
+%Recall, in general, Z=a+b*(c:d) defines Z as array [a+bc ...  a+bd]
+X=0+h*(0:n)
+Y=1+h*(0:n)
+
+sympref('FloatingPointOutput',true); %Converts to decimals
+syms x y %Declares x and y as variables
+%Define the boundary value conditions as a piecewise defined function
+%Hint: u(x,y)=piecewise(y==1,log(x^2+1),condition_2,function_2,cond_3,fun_3,cond_4,fun_4)
+u(x,y)=piecewise(y==1,log(x^2+1),y==2,log(x^2+4),x==0,2*log(y),x==1,log(y^2+1),log(x^2+y^2))
+%Starting in bottom row and going left to right in diagram, define coefficient matrix A for the system of equations
+%That is, row 1 in A should represent equation for finite difference method around U_1=u_11, etc.
+A=[4 -1 0 -1 0 0 0 0 0; -1 4 -1 0 -1 0 0 0 0; 0 -1 4 0 0 -1 0 0 0; -1 0 0 4 -1 0 -1 0 0; 0 -1 0 -1 4 -1 0 -1 0; 0 0 -1 0 -1 4 0 0 -1; 0 0 0 -1 0 0 4 -1 0; 0 0 0 0 -1 0 -1 4 -1; 0 0 0 0 0 -1 0 -1 4]
+%Define vector B for the system of equations
+B=[u(X(1),Y(2))+u(X(2),Y(1));u(X(3),Y(1));u(X(4),Y(1))+u(X(5),Y(2));u(X(1),Y(3));0;u(X(5),Y(3));u(X(1),Y(4))+u(X(2),Y(5));u(X(3),Y(5));u(X(5),Y(4))+u(X(4),Y(5))]
+%Find solution U=[U_1;...;U_9] to system of equations (capital U so Matlab doesn't confuse it with function u(x,y))
+U=A\B
+%Part (b) - see description above
+%Part (c)
+%The following takes vector U and reshapes it as a 3x3 matrix that fits diagram above
+Matrix_U=flip(transpose(reshape(double(U),3,3)))
+%The following reshapes X and Y so that (Matrix_X(i,j),Matrix_Y(i,j)) matches point (x_i,y_j) in diagram above
+[Matrix_X,Matrix_Y]=meshgrid(X(2:4),Y(4:-1:2))
+%Plots actual solution as a surface
+fsurf(u(x,y),[0 1 1 2],'green')
+%Adds the plot of the approximations found in part (a)
+hold on
+plot3(Matrix_X,Matrix_Y,Matrix_U,'black.','MarkerSize',30) 
