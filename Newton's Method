@@ -1,0 +1,77 @@
+[8 marks]
+Consider the nonlinear equation .  To find a solution to the equation you could try to solve for the root of  or .
+Part (i)
+Open your code for Newton's method that you were asked to create at the end of the Matlab Tutorial from last lab.  Copy/paste it 2 times into the script window below (i.e. paste it under Part A and then under Part B in the script window).  Use the code to try to approximate a root for each of A)  and B)  using Newton's method with an initial guess  and a tolerance of  (i.e. code stops when difference between consecutive approximations are within ).
+NOTE: For marking purposes:
+Change format long in your code to format short  (this will help with reading/understanding the output)
+In Part B, be sure to change the function (and associated lines of code) from  to , the approximations from  to  , and the difference to be difference2.
+Part (ii)
+Looking at the output of your code, explain what has occurred with respect to the convergence of Newton's method to a root of each function  and .  Type your explanation in the text box available on Gradescope.
+
+
+%Part A
+%Define initial guess as first entry in array p.
+%As p is an array, p(0) does not exist.
+%Hence, we need to define 'p(1)' as initial guess p_0.
+p(1)=307
+syms x %Defines x as a variable. Don't change.
+format long %Ensures answers are stated to 15 decimal places
+%Define g(x) as a function handle.
+g=@(x)x.^3-x*cos(x)+1
+%Define g'(x) as using the command gprime=diff(g,x)
+gprime=diff(g,x)
+%Define the 'tolerance' 
+tolerance=.00001;
+%Define 'difference' to be any number larger than the tolerance
+difference=1;
+%Define the counter in the loop as k=1
+k=1;
+%Create a 'while' loop for Newton's Method.
+%Hint: There should be 3 lines of code in the loop.
+%One being the approximation p(k+1), one being the absolute value of the difference between consecutive approximations,
+%and the last being the loop's counter.
+while difference>tolerance
+    p(k+1) = p(k)-g(p(k))/subs(gprime,x,p(k));
+    difference = abs(p(k+1)-p(k));
+    k= k+1;
+    %Note, to find the derivative at a point use subs(gprime,x,point) - substituting appropriately for point.
+    
+    
+    
+end
+p   %Displays p_0,...,P_(N) as an array.
+difference  %Displays difference between last two approx.
+
+%Part B
+
+%Define initial guess as first entry in array p.
+%As p is an array, p(0) does not exist.
+%Hence, we need to define 'p(1)' as initial guess p_0.
+q(1)=307
+syms x %Defines x as a variable. Don't change.
+format long %Ensures answers are stated to 15 decimal places
+%Define g(x) as a function handle.
+h=@(x)((x*cos(x))/(x^(3)+1))-1
+%Define g'(x) as using the command gprime=diff(g,x)
+hprime=diff(h,x)
+%Define the 'tolerance' 
+tolerance=0.0001;
+%Define 'difference' to be any number larger than the tolerance
+difference=1;
+%Define the counter in the loop as k=1
+k=1;
+%Create a 'while' loop for Newton's Method.
+%Hint: There should be 3 lines of code in the loop.
+%One being the approximation p(k+1), one being the absolute value of the difference between consecutive approximations,
+%and the last being the loop's counter.
+while difference>tolerance
+    q(k+1) = q(k)-h(q(k))/subs(hprime,x,q(k));
+    difference = abs(q(k+1)-q(k));
+    k= k+1;
+    %Note, to find the derivative at a point use subs(gprime,x,point) - substituting appropriately for point.
+    
+    
+    
+end
+q   %Displays p_0,...,P_(N) as an array.
+difference  %Displays difference between last two approx
