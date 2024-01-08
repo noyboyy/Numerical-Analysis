@@ -1,0 +1,30 @@
+[3 marks]
+Recall the initial value problem  from Lab Assignment #3, where  modelled Waterloo Region's population  years after .
+Copy your code from Question #4, Lab 3 (Adams-Bashforth method) and paste it in the script window below.  Modify the code so that it uses the Adams-Bashforth-Moulton predictor-corrector method to approximate Waterloo Region's population from years 48 (i.e. 2043) to 120 (i.e. 2115) in increments of  years   Use the initial condition for the initial value problem and the results from Lab 3 for years , , and  (recorded to the closest person) as the first four approximations.  
+For marking purposes, call the results of the predictor formula X, the results of the corrector formula Y, and be sure to display each of the results to the closest person using vpa(X,6) and vpa(Y,6).
+
+syms y t
+%Define h and f(t,y)
+h=12
+f(t,y) = y/10000*(200-y/12000)
+T(1) = 0
+Y(1) = 421000
+
+%Define two arrays, T and Y, each of size 4 where T is the years 0, 12, 24, and 36 
+%while Y has the corresponding populations from the initial condition and Question #1b).
+T=[0,12,24,36]
+Y=[421000, 509720, 611528,726075]
+%Create 'for' loop that calculates T from years 40 to 100 and the 
+%corresponding approximate populations using the Adams-Bashforth Formula.
+for i=4:10
+    T(i+1)=T(i)+h
+    X(i+1)=Y(i)+h/24*(55*f(T(i),Y(i))-59*f(T(i-1),Y(i-1))+37*f(T(i-2),Y(i-2))-9*f(T(i-3),Y(i-3)));
+    Y(i+1)=Y(i)+h/24*(9*f(T(i+1),X(i+1))+19*f(T(i),Y(i))-5*f(T(i-1),Y(i-1))+f(T(i-2),Y(i-2)));
+end
+%Displays some of the results for grading purposes. Don't change.
+T4=T(4)
+Y4=vpa(Y(4),6)
+T
+Y=vpa(Y,6)
+X=vpa(X,6)
+
