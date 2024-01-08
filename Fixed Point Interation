@@ -1,0 +1,59 @@
+[4 marks]
+Consider the equation .  
+Instead of using 'finding roots' methods (like we did in Question #1) to find a solution to the equation, we could try to solve for a fixed point of  or .
+Part (a) 
+In the script window below, complete the code under Part (a) so that it uses the fixed point iteration to try to find a fixed point of  with an initial guess  and a tolerance of  (i.e. code stops when difference between consecutive approximations are within ).
+Part (b)
+Copy the code from Part (a) and paste it into the script window under Part (b).  Modify the code to try to find a fixed point of  with an initial guess  and a tolerance of  (i.e. code stops when difference between consecutive approximations are within ).
+NOTE: For marking purposes, in Part (b), be sure to change the function (and associated lines of code) from  to , the approximations from  to  , and the difference to be difference2.
+
+
+
+%Part (a)
+%Define y(x)
+y=@(x)(sin(x+1)).^(1/3)
+%Define initial guess p_0 as first entry in array p (i.e. p(1)).
+p(1) = -0.5              
+%Define the tolerance.                        
+tolerance = 0.0001
+%Define the difference to initially be any number that's greater than the tolerance (so it will enter loop).
+difference =1
+%Define 'k=1' as starting point for "counter" in loop.
+k=1
+%Create 'while' loop for the fixed point iteration.
+%Be sure to calculate the difference between consecutive terms as they are calculated.
+while difference > tolerance
+    p(k+1) = y(p(k));
+    difference = abs(p(k+1)-p(k));
+    k = k+1;
+ 
+    
+    
+end
+p      %Displays array p
+difference  %Displays difference between last two approx.
+
+%Part (b)
+%Define y(x)
+z=@(x)(sin(x+1))-x.^3+x
+%Define initial guess p_0 as first entry in array p (i.e. p(1)).
+q(1) = -0.5              
+%Define the tolerance.                        
+tolerance = 0.0001
+%Define the difference to initially be any number that's greater than the tolerance (so it will enter loop).
+difference2 =1
+%Define 'k=1' as starting point for "counter" in loop.
+k=1
+%Create 'while' loop for the fixed point iteration.
+%Be sure to calculate the difference between consecutive terms as they are calculated.
+while difference2 > tolerance
+    q(k+1) = z(q(k));
+    difference2 = abs(q(k+1)-q(k));
+    k = k+1;
+ 
+    
+    
+end
+q      %Displays array p
+difference2  %Displays difference between last two approx.
+
