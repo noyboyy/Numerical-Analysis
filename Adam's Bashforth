@@ -1,0 +1,28 @@
+[3 marks Matlab]
+Recall the initial value problem  from Questions #1 to #3, where  modelled Waterloo Region's population  years after .
+Complete the code that uses the explicit fourth order Adams-Bashforth formula to approximate Waterloo Region's population from years 48 (i.e. 2043) to 120 (i.e. 2115) in increments of  years   Use the initial condition for the initial value problem and the results recorded to the closest person in Question #1b) in Gradescope as the first four approximations.
+[Note: Error calculations (in relation to the actual solution to the IVP) are not required and answers do not need to be recorded in Gradescope.]
+
+syms y t
+%Define h and f(t,y)
+h=12
+f(t,y) = y/10000*(200-y/12000)
+T(1) = 0
+Y(1) = 421000
+
+%Define two arrays, T and Y, each of size 4 where T is the years 0, 12, 24, and 36 
+%while Y has the corresponding populations from the initial condition and Question #1b).
+T=[0,12,24,36]
+Y=[421000, 509720, 611528,726075]
+%Create 'for' loop that calculates T from years 40 to 100 and the 
+%corresponding approximate populations using the Adams-Bashforth Formula.
+for i=4:10
+    T(i+1)=T(i)+h
+    Y(i+1)=Y(i)+h/24*(55*f(T(i),Y(i))-59*f(T(i-1),Y(i-1))+37*f(T(i-2),Y(i-2))-9*f(T(i-3),Y(i-3)));
+end
+%Displays some of the results for grading purposes. Don't change.
+T4=T(4)
+Y4=vpa(Y(4),6)
+T
+Y=vpa(Y,6)
+
